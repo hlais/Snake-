@@ -34,7 +34,13 @@
             this.scrLabel = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.imgList = new System.Windows.Forms.ImageList(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutCreatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.picGameBoard)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // picGameBoard
@@ -74,6 +80,47 @@
             this.imgList.Images.SetKeyName(5, "snake_head.png");
             this.imgList.Images.SetKeyName(6, "wall.png");
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.aboutCreatorToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.resetToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // aboutCreatorToolStripMenuItem
+            // 
+            this.aboutCreatorToolStripMenuItem.Name = "aboutCreatorToolStripMenuItem";
+            this.aboutCreatorToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.aboutCreatorToolStripMenuItem.Text = "About Creator";
+            this.aboutCreatorToolStripMenuItem.Click += new System.EventHandler(this.aboutCreatorToolStripMenuItem_Click);
+            // 
+            // resetToolStripMenuItem
+            // 
+            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetToolStripMenuItem.Text = "Reset";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // frmSnake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -81,13 +128,17 @@
             this.ClientSize = new System.Drawing.Size(537, 517);
             this.Controls.Add(this.scrLabel);
             this.Controls.Add(this.picGameBoard);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MinimizeBox = false;
             this.Name = "frmSnake";
             this.Text = "SNAKE ";
             this.Load += new System.EventHandler(this.frmSnake_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmSnake_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.picGameBoard)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,6 +150,11 @@
         private System.Windows.Forms.Label scrLabel;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ImageList imgList;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutCreatorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

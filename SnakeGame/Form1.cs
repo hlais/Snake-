@@ -25,7 +25,6 @@ namespace SnakeGame
 
         //gameboard 2D dimenstional array
         GameBoardFields[,] gameBoardField;
-
         //coardinates of snake. Not 2D array, since its STUCT hold 2d coordinates 
         SnakeCoordinates[] snakeXY;
         int snakeLength;
@@ -33,8 +32,6 @@ namespace SnakeGame
 
         //to paint on the surface
         Graphics graphics;
-
-      
 
         public frmSnake()
         {
@@ -54,13 +51,13 @@ namespace SnakeGame
             graphics.Clear(Color.White);
 
             //drawing wall
-            for (int i = 1; i < 11; i++)
+            for (int i = 1; i <= 10; i++)
             {
                 //top and bottom walls. i*35. 35 is the pxl sprite
                 graphics.DrawImage(imgList.Images[6], i * 35, 0);
                 graphics.DrawImage(imgList.Images[6], i * 35, 385);
             }
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i <= 11; i++)
             {
                 //top and bottom walls. i*35. 35 is the pxl sprite
                 graphics.DrawImage(imgList.Images[6], 0, i*35);
@@ -84,10 +81,12 @@ namespace SnakeGame
             graphics.DrawImage(imgList.Images[4], 5 * 35, 7 * 35);
             //end draw snake
 
+            //keeping track snake position using gameboardfield array
             gameBoardField[5, 5] = GameBoardFields.Snake;
             gameBoardField[5, 6] = GameBoardFields.Snake;
             gameBoardField[5, 7] = GameBoardFields.Snake;
 
+            //initial direction and size
             direction = Directions.Up;
             snakeLength = 3;
 
@@ -97,25 +96,25 @@ namespace SnakeGame
             }
 
         }
+
         private void Bonus()
         {
             int x, y;
             int imgIndex = randonGen.Next(0, 4);
-            //to display only on free fields
+            
             do
-            {
+            { 
+                //only accounting for game area minus wall
                 x = randonGen.Next(1, 10);
                 y = randonGen.Next(1, 10);
             }
-            while (gameBoardField[x, y] != GameBoardFields.Free);
+            while (gameBoardField[x, y] != GameBoardFields.Free); //to display only on free fields
 
             gameBoardField[x, y] = GameBoardFields.Bonus;
             graphics.DrawImage(imgList.Images[imgIndex], x * 35, y * 35);
-
-     
-           
         }
 
+        //e is events. in this case key press. 
         private void frmSnake_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -134,25 +133,102 @@ namespace SnakeGame
                     break;
             }
         }
+
         private void GameOver()
         {
             //puase game
             timer.Enabled = false;
-            MessageBox.Show("Game Over");
-
+            MessageBox.Show("GAME OVER");
         }
 
+        //method is associated with Timer => Events 
         private void Timer_Tick(object sender, EventArgs e)
         {
             //remove last piece of snake, we paint it white
             graphics.FillRectangle(Brushes.White, snakeXY[snakeLength - 1].x * 35,
                                                   snakeXY[snakeLength - 1].y *35 ,35,35);
-
             gameBoardField[snakeXY[snakeLength - 1].x, snakeXY[snakeLength - 1].y] = GameBoardFields.Free;
-            //picGameBoard.Refresh();
+            //end white paint
 
-            //move snake field on the position of the previous on
-        
+            //move snake body part in position of previous position 
+            for (int i = snakeLength; i >= 1; i--) // -- since we are moving up
+            {  
+                //value from previous coordinates
+                snakeXY[i].x = snakeXY[i - 1].x;
+                snakeXY[i].y = snakeXY[i - 1].y;    
+            }
+
+            graphics.DrawImage(imgList.Images[4], snakeXY[0].x * 35, snakeXY[0].y * 35);
+
+            //change direction of head
+            switch (direction)
+            {
+                case Directions.Up:
+                    //on the axis the y is decreases when going up
+                    snakeXY[0].y = snakeXY[0].y-1;
+                    break;
+                case Directions.Down:
+                    snakeXY[0].y = snakeXY[0].y+1;
+                    break;
+                case Directions.Left:
+                    snakeXY[0].x = snakeXY[0].x-1;
+                    break;
+                case Directions.Right:
+                    snakeXY[0].x = snakeXY[0].x+1;
+                    break;
+            }
+
+            //check if snake hit the wall
+            if (snakeXY[0].x < 1 || snakeXY[0].x > 10 || snakeXY[0].y < 1 || snakeXY[0].y > 10)
+            {
+                GameOver();
+                picGameBoard.Refresh();
+                return;
+            }
+            //check if snake hit its own body
+            if (gameBoardField[snakeXY[0].x, snakeXY[0].y] == GameBoardFields.Snake)
+            {
+                GameOver();
+                picGameBoard.Refresh();
+                return;
+            }
+            //check if snake ate the bonus// we add another piece to snake
+            if (gameBoardField[snakeXY[0].x, snakeXY[0].y] == GameBoardFields.Bonus)
+            {
+                graphics.DrawImage(imgList.Images[4], snakeXY[snakeLength].x * 35, snakeXY[snakeLength].y *35);
+                //assign the new image as snake gameboard
+                gameBoardField[snakeXY[snakeLength].x, snakeXY[snakeLength].y] = GameBoardFields.Snake;
+                snakeLength++;
+
+                
+                if (snakeLength < 96)
+                {
+                    Bonus();
+                }
+                scrLabel.Text = "Snake - score: " + snakeLength.ToString();
+            }
+
+            //draw head
+            graphics.DrawImage(imgList.Images[5], snakeXY[0].x * 35, snakeXY[0].y * 35);
+            gameBoardField[snakeXY[0].x, snakeXY[0].y] = GameBoardFields.Snake;
+            picGameBoard.Refresh();
+
+
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void aboutCreatorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Created by: Halim Lais \n\r\t View Portfolio http://bit.ly/isolatedgamerz");
         }
     }
 }
